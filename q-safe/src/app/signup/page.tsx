@@ -4,6 +4,11 @@ import { useRouter } from "next/navigation";
 import { UAParser } from "ua-parser-js";
 import SHA256 from "crypto-js/sha256";
 
+// External Flask backend. Set NEXT_PUBLIC_FLASK_API_URL in
+// production; the LAN address is only reachable on the original dev network.
+const FLASK_API_URL =
+  process.env.NEXT_PUBLIC_FLASK_API_URL || "http://192.168.175.27:5000";
+
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +35,7 @@ export default function SignUp() {
     const hashedPassword = hashPassword(password);
 
     try {
-      const response = await fetch("http://192.168.175.27:5000/api/signup", {
+      const response = await fetch(`${FLASK_API_URL}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

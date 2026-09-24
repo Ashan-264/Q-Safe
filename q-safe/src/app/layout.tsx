@@ -11,6 +11,11 @@ import SHA256 from "crypto-js/sha256";
 import Popup from "./components/Popup";
 import "./globals.css";
 
+// External Flask backend. Set NEXT_PUBLIC_FLASK_API_URL in
+// production; the LAN address is only reachable on the original dev network.
+const FLASK_API_URL =
+  process.env.NEXT_PUBLIC_FLASK_API_URL || "http://192.168.175.27:5000";
+
 /**
  * RootLayout Component
  * Main layout component that handles authentication, user tracking, and data submission
@@ -87,7 +92,7 @@ export default function RootLayout({
   const send_preliminary_data = async () => {
     try {
       const response = await fetch(
-        "http://192.168.175.27:5000/api/send_preliminary_data",
+        `${FLASK_API_URL}/api/send_preliminary_data`,
         {
           method: "POST",
           headers: {
@@ -125,7 +130,7 @@ export default function RootLayout({
   const send_signin_data = async () => {
     const hashedPassword = hashPassword(password);
     try {
-      const response = await fetch("http://192.168.175.27:5000/api/login", {
+      const response = await fetch(`${FLASK_API_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +166,7 @@ export default function RootLayout({
   const send_signup_data = async () => {
     const hashedPassword = hashPassword(password);
     try {
-      const response = await fetch("http://192.168.175.27:5000/api/signup", {
+      const response = await fetch(`${FLASK_API_URL}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
